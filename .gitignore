@@ -1,0 +1,30 @@
+# Environment files
+.env
+
+# Data directories
+data/
+configs/zurg/config.yml
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Backup files
+*.bak
+*.backup
+*.old
