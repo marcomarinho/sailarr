@@ -31,13 +31,35 @@ mkdir -p "${BASE_DIR}"/data/symlinks/{radarr,sonarr}/{completed,processing}
 mkdir -p "${BASE_DIR}"/data/remote/realdebrid
 mkdir -p "${BASE_DIR}"/data/local/transcodes/plex
 
+# Create default Zurg config if it doesn't exist
+if [ ! -f "${BASE_DIR}/configs/zurg/config.yml" ]; then
+    echo "📝 Creating default Zurg config..."
+    cat > "${BASE_DIR}/configs/zurg/config.yml" <<EOL
+zurg: v1
+token: ENTER_YOUR_TOKEN_HERE
+host: "[::]"
+port: 9999
+concurrent_workers: 32
+check_for_changes_every_secs: 10
+ignore_renames: true
+retain_rd_torrent_name: true
+retain_rd_torrent_numbering: true
+EOL
+fi
+
 echo ""
 echo "✅ Directory structure created successfully!"
 echo ""
 
 # Get current user's PUID and PGID
-CURRENT_PUID=$(id -u)
-CURRENT_PGID=$(id -g)
+if [ -n "$SUDO_USER" ]; then
+    CURRENT_PUID=$(id -u "$SUDO_USER")
+    CURRENT_PGID=$(id -g "$SUDO_USER")
+    echo "Running with sudo, using original user: $SUDO_USER"
+else
+    CURRENT_PUID=$(id -u)
+    CURRENT_PGID=$(id -g)
+fi
 
 echo "Current user PUID: ${CURRENT_PUID}"
 echo "Current user PGID: ${CURRENT_PGID}"
