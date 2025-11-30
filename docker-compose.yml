@@ -200,6 +200,30 @@ services:
       - mediacenter
 
   # ============================================
+  # BAZARR - Subtitle Management
+  # ============================================
+  bazarr:
+    image: ghcr.io/hotio/bazarr:release
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/New_York}
+    ports:
+      - "6767:6767"
+    volumes:
+      - ./configs/bazarr:/config
+      - ./data/plex:/data/plex
+      - ./data/remote/realdebrid:/data/remote/realdebrid:ro
+      - /mnt:/mnt
+    depends_on:
+      - radarr
+      - sonarr
+    networks:
+      - mediacenter
+
+  # ============================================
   # RECYCLARR - TRaSH Guides Sync
   # ============================================
   recyclarr:

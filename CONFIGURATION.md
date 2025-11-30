@@ -10,10 +10,11 @@ This guide will walk you through configuring each service in your Sailarr media 
 4. [Prowlarr Configuration](#prowlarr-configuration)
 5. [Radarr Configuration](#radarr-configuration)
 6. [Sonarr Configuration](#sonarr-configuration)
-7. [Blackhole Configuration](#blackhole-configuration)
-8. [Autoscan Configuration](#autoscan-configuration)
-9. [Overseerr Configuration](#overseerr-configuration)
-10. [Recyclarr Configuration](#recyclarr-configuration)
+7. [Bazarr Configuration](#bazarr-configuration)
+8. [Blackhole Configuration](#blackhole-configuration)
+9. [Autoscan Configuration](#autoscan-configuration)
+10. [Overseerr Configuration](#overseerr-configuration)
+11. [Recyclarr Configuration](#recyclarr-configuration)
 
 ---
 
@@ -271,6 +272,48 @@ Settings > Media Management
   ```
   {Series Title} ({Series Year})
   ```
+
+---
+
+## Bazarr Configuration
+
+Access Bazarr at: `http://YOUR_SERVER_IP:6767`
+
+### 1. Initial Setup
+
+1. Set up authentication (Settings > General > Authentication)
+2. Copy the API key (Settings > General > API Key)
+3. Add this to your `.env` file as `BAZARR_API_KEY`
+
+### 2. Connect to Radarr/Sonarr
+
+Settings > Radarr / Sonarr
+
+**Radarr:**
+- Enable: Yes
+- Address: `radarr`
+- Port: `7878`
+- API Key: (from Radarr)
+- Base URL: (leave empty)
+
+**Sonarr:**
+- Enable: Yes
+- Address: `sonarr`
+- Port: `8989`
+- API Key: (from Sonarr)
+- Base URL: (leave empty)
+
+### 3. Path Mappings
+
+Since Bazarr sees the same paths as Radarr/Sonarr (`/data/plex`), no path mapping is usually required if you use the same paths.
+
+### 4. Subtitles
+
+Settings > Subtitles
+
+- **Languages**: Select your preferred languages
+- **Providers**: Enable providers (e.g., OpenSubtitles, etc.)
+- **Subtitles Folder**: Leave empty to save next to video file (recommended for symlinks setup, as it will save to `/data/plex/...` which is a local directory containing the symlink)
 
 ---
 

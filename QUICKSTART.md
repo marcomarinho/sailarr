@@ -123,21 +123,6 @@ This will show you all the service URLs.
 
 ## Initial Configuration
 
-### 1. Plex (http://YOUR_IP:32400/web)
-
-1. Sign in with your Plex account
-2. Name your server
-3. Add libraries:
-   - Movies: `/data/plex/Movies`
-   - TV: `/data/plex/TV`
-
-### 2. Prowlarr (http://YOUR_IP:9696)
-
-1. Set up authentication
-2. Copy API key
-3. Add indexers (YTS, EZTV, 1337x, etc.)
-
-### 3. Radarr (http://YOUR_IP:7878)
 
 1. Set up authentication
 2. Copy API key → Add to `.env` as `RADARR_API_KEY`

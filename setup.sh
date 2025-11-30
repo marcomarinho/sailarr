@@ -22,7 +22,7 @@ mkdir -p "${BASE_DIR}"/{configs,data,scripts}
 
 # Create config directories
 echo "📁 Creating config directories..."
-mkdir -p "${BASE_DIR}"/configs/{zurg/data,plex,radarr,sonarr,prowlarr,autoscan,overseerr,blackhole/logs,recyclarr}
+mkdir -p "${BASE_DIR}"/configs/{zurg/data,plex,radarr,sonarr,bazarr,prowlarr,autoscan,overseerr,blackhole/logs,recyclarr}
 
 # Create data directories
 echo "📁 Creating data directories..."

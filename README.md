@@ -130,6 +130,7 @@ After starting the services, access them at:
 - **Plex**: http://localhost:32400/web
 - **Radarr**: http://localhost:7878
 - **Sonarr**: http://localhost:8989
+- **Bazarr**: http://localhost:6767
 - **Prowlarr**: http://localhost:9696
 - **Autoscan**: http://localhost:3030
 - **Overseerr**: http://localhost:5055

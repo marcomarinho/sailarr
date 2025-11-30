@@ -155,6 +155,7 @@ show_urls() {
     echo -e "${GREEN}Radarr:${NC}      http://${HOST_IP}:7878"
     echo -e "${GREEN}Sonarr:${NC}      http://${HOST_IP}:8989"
     echo -e "${GREEN}Prowlarr:${NC}    http://${HOST_IP}:9696"
+    echo -e "${GREEN}Bazarr:${NC}      http://${HOST_IP}:6767"
     echo -e "${GREEN}Autoscan:${NC}    http://${HOST_IP}:3030"
     echo -e "${GREEN}Overseerr:${NC}   http://${HOST_IP}:5055"
     echo -e "${GREEN}Zurg:${NC}        http://${HOST_IP}:9999"

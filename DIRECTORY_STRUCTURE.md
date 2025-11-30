@@ -30,6 +30,7 @@ configs/
 ├── plex/                 # Plex configuration and metadata
 ├── radarr/               # Radarr configuration
 ├── sonarr/               # Sonarr configuration
+├── bazarr/               # Bazarr configuration
 ├── prowlarr/             # Prowlarr configuration
 ├── autoscan/             # Autoscan configuration
 ├── recyclarr/            # Recyclarr configuration
