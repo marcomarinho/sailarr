@@ -349,7 +349,7 @@ services:
       retries: 10
     volumes:
       - ./configs/riven/data:/riven/data
-      - ./data/riven/mount:/mount:rshared,z
+      - /mnt/riven:/mount:rshared,z
     depends_on:
       riven-db:
         condition: service_healthy
@@ -368,7 +368,7 @@ services:
       - TZ=${TZ:-America/New_York}
       - ORIGIN=http://localhost:3000 # Change to your domain if needed
       - BACKEND_URL=http://riven:8080
-      - BACKEND_API_KEY=${RIVEN_BACKEND_API_KEY}
+      - BACKEND_API_KEY=${BACKEND_API_KEY}
       - DIALECT=postgres
       - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
     depends_on:

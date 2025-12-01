@@ -33,6 +33,16 @@ mkdir -p "${BASE_DIR}"/data/plex/{"Movies","TV"}
 mkdir -p "${BASE_DIR}"/data/riven/mount
 mkdir -p "${BASE_DIR}"/data/local/transcodes/plex
 
+# Create and configure the mount point
+echo "📁 Configuring Riven mount point..."
+RIVEN_MOUNT_PATH=/mnt/riven
+mkdir -p $RIVEN_MOUNT_PATH
+mount --bind $RIVEN_MOUNT_PATH $RIVEN_MOUNT_PATH
+mount --make-rshared $RIVEN_MOUNT_PATH
+# Verify mount propagation
+echo "Verifying mount propagation..."
+findmnt -T $RIVEN_MOUNT_PATH -o TARGET,PROPAGATION
+
 echo ""
 echo "✅ Directory structure created successfully!"
 echo ""
@@ -57,11 +67,11 @@ if [ ! -f "${BASE_DIR}/.env" ]; then
     fi
     
     # Update .env with the key
-    # Check if RIVEN_BACKEND_API_KEY exists in .env, if not append it
-    if grep -q "RIVEN_BACKEND_API_KEY=" "${BASE_DIR}/.env"; then
-        sed -i.bak "s/RIVEN_BACKEND_API_KEY=.*/RIVEN_BACKEND_API_KEY=${RIVEN_KEY}/" "${BASE_DIR}/.env" && rm "${BASE_DIR}/.env.bak"
+    # Check if BACKEND_API_KEY exists in .env, if not append it
+    if grep -q "BACKEND_API_KEY=" "${BASE_DIR}/.env"; then
+        sed -i.bak "s/BACKEND_API_KEY=.*/BACKEND_API_KEY=${RIVEN_KEY}/" "${BASE_DIR}/.env" && rm "${BASE_DIR}/.env.bak"
     else
-        echo "RIVEN_BACKEND_API_KEY=${RIVEN_KEY}" >> "${BASE_DIR}/.env"
+        echo "BACKEND_API_KEY=${RIVEN_KEY}" >> "${BASE_DIR}/.env"
     fi
     echo "✅ Generated and configured Riven API Key"
 else
