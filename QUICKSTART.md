@@ -129,7 +129,7 @@ This will show you all the service URLs.
 3. Add root folder: `/data/plex/Movies`
 4. Add download client:
    - Type: Torrent Blackhole
-   - Torrent Folder: `/data/symlinks/radarr/processing`
+   - Torrent Folder: `/data/symlinks/radarr`
    - Watch Folder: `/data/symlinks/radarr/completed`
    - Save Magnet Files: Yes
    - Magnet Extension: `.magnet`
@@ -141,7 +141,7 @@ This will show you all the service URLs.
 3. Add root folder: `/data/plex/TV`
 4. Add download client:
    - Type: Torrent Blackhole
-   - Torrent Folder: `/data/symlinks/sonarr/processing`
+   - Torrent Folder: `/data/symlinks/sonarr`
    - Watch Folder: `/data/symlinks/sonarr/completed`
    - Save Magnet Files: Yes
    - Magnet Extension: `.magnet`

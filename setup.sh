@@ -18,37 +18,57 @@ echo ""
 
 # Create base directories
 echo "📁 Creating base directories..."
-mkdir -p "${BASE_DIR}"/{configs,data,scripts}
+mkdir -p "${BASE_DIR}"/{configs,data}
 
 # Create config directories
 echo "📁 Creating config directories..."
-mkdir -p "${BASE_DIR}"/configs/{zurg/data,plex,radarr,sonarr,bazarr,prowlarr,autoscan,overseerr,blackhole/logs,recyclarr}
+# Riven
+mkdir -p "${BASE_DIR}"/configs/riven/{data,frontend,db}
+# Other services
+mkdir -p "${BASE_DIR}"/configs/{plex,prowlarr,overseerr}
 
 # Create data directories
 echo "📁 Creating data directories..."
 mkdir -p "${BASE_DIR}"/data/plex/{"Movies","TV"}
-mkdir -p "${BASE_DIR}"/data/symlinks/{radarr,sonarr}/{completed,processing}
-mkdir -p "${BASE_DIR}"/data/remote/realdebrid
+mkdir -p "${BASE_DIR}"/data/riven/mount
 mkdir -p "${BASE_DIR}"/data/local/transcodes/plex
-
-# Create default Zurg config if it doesn't exist
-if [ ! -f "${BASE_DIR}/configs/zurg/config.yml" ]; then
-    echo "📝 Creating default Zurg config..."
-    cat > "${BASE_DIR}/configs/zurg/config.yml" <<EOL
-zurg: v1
-token: ENTER_YOUR_TOKEN_HERE
-host: "[::]"
-port: 9999
-concurrent_workers: 32
-check_for_changes_every_secs: 10
-ignore_renames: true
-retain_rd_torrent_name: true
-retain_rd_torrent_numbering: true
-EOL
-fi
 
 echo ""
 echo "✅ Directory structure created successfully!"
+echo ""
+
+# Copy files
+echo "📁 Copying configuration files..."
+cp docker-compose.yml "${BASE_DIR}/"
+cp manage.sh "${BASE_DIR}/"
+chmod +x "${BASE_DIR}/manage.sh"
+
+if [ ! -f "${BASE_DIR}/.env" ]; then
+    echo "Creating .env from .env.example..."
+    cp .env.example "${BASE_DIR}/.env"
+    
+    # Generate Riven Backend API Key
+    echo "Generating Riven Backend API Key..."
+    if command -v openssl &> /dev/null; then
+        RIVEN_KEY=$(openssl rand -hex 16)
+    else
+        # Fallback to tr/urandom
+        RIVEN_KEY=$(cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 32 | head -n 1)
+    fi
+    
+    # Update .env with the key
+    # Check if RIVEN_BACKEND_API_KEY exists in .env, if not append it
+    if grep -q "RIVEN_BACKEND_API_KEY=" "${BASE_DIR}/.env"; then
+        sed -i.bak "s/RIVEN_BACKEND_API_KEY=.*/RIVEN_BACKEND_API_KEY=${RIVEN_KEY}/" "${BASE_DIR}/.env" && rm "${BASE_DIR}/.env.bak"
+    else
+        echo "RIVEN_BACKEND_API_KEY=${RIVEN_KEY}" >> "${BASE_DIR}/.env"
+    fi
+    echo "✅ Generated and configured Riven API Key"
+else
+    echo "⚠️  .env already exists, skipping creation and key generation."
+fi
+
+echo "✅ Files copied successfully!"
 echo ""
 
 # Get current user's PUID and PGID
@@ -71,8 +91,8 @@ echo ""
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Setting permissions..."
-    sudo chown -R "${CURRENT_PUID}:${CURRENT_PGID}" "${BASE_DIR}"
-    sudo chmod -R 775 "${BASE_DIR}"
+    chown -R "${CURRENT_PUID}:${CURRENT_PGID}" "${BASE_DIR}"
+    chmod -R 775 "${BASE_DIR}"
     echo "✅ Permissions set successfully!"
 else
     echo "⚠️  Skipping permission setup. Remember to set permissions manually:"
@@ -90,29 +110,15 @@ echo ""
 echo "================================================"
 echo "Next Steps:"
 echo "================================================"
-echo "1. Copy .env.example to .env and configure:"
-echo "   cp .env.example .env"
+echo "1. Go to the media center directory:"
+echo "   cd ${BASE_DIR}"
+echo ""
+echo "2. Configure your .env file (add Real-Debrid API key, etc):"
 echo "   nano .env"
 echo ""
-echo "2. Add your Real-Debrid API token to:"
-echo "   ${BASE_DIR}/configs/zurg/config.yml"
-echo ""
-echo "3. Start the services:"
-echo "   docker-compose up -d"
+echo "3. Start the core services to configure Riven:"
+echo "   ./manage.sh core"
 echo ""
 echo "================================================"
 
-# Make scripts executable
-if [ -f "${BASE_DIR}/manage.sh" ]; then
-    chmod +x "${BASE_DIR}"/manage.sh
-fi
-if [ -f "${BASE_DIR}/scripts/zurgupdate.sh" ]; then
-    chmod +x "${BASE_DIR}"/scripts/zurgupdate.sh
-fi
-
 echo "✅ Setup complete! Directory structure created at ${BASE_DIR}"
-echo "📝 Next steps:"
-echo "1. Copy .env.example to .env and configure it"
-echo "2. Copy docker-compose.yml to ${BASE_DIR}"
-echo "3. Copy manage.sh and scripts/ to ${BASE_DIR}"
-echo "4. Run ./manage.sh core to start Zurg and Rclone"

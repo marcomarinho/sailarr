@@ -70,13 +70,13 @@ restart_all() {
     print_success "All services restarted!"
 }
 
-# Start core services (Zurg + rclone)
+# Start core services (Riven)
 start_core() {
-    print_header "Starting Core Services (Zurg + rclone)"
+    print_header "Starting Core Services (Riven)"
     check_compose
-    docker-compose up -d zurg rclone
+    docker-compose up -d riven riven-db riven-frontend plex overseerr
     print_success "Core services started!"
-    print_info "Waiting for Zurg to be healthy..."
+    print_info "Waiting for Riven to be healthy..."
     sleep 5
     show_status
 }
@@ -113,9 +113,9 @@ update_all() {
 
 # Verify mount
 verify_mount() {
-    print_header "Verifying Real-Debrid Mount"
+    print_header "Verifying Riven Mount"
     
-    MOUNT_PATH="./data/remote/realdebrid"
+    MOUNT_PATH="./data/riven/mount"
     
     if [ ! -d "$MOUNT_PATH" ]; then
         print_error "Mount directory does not exist: $MOUNT_PATH"
@@ -136,9 +136,8 @@ verify_mount() {
             ls -lah "$MOUNT_PATH" | head -20
         else
             print_error "Mount appears to be empty or not working!"
-            print_info "Check Zurg and rclone logs:"
-            echo "  docker-compose logs zurg"
-            echo "  docker-compose logs rclone"
+            print_info "Check Riven logs:"
+            echo "  docker-compose logs riven"
         fi
     fi
 }
@@ -151,14 +150,15 @@ show_urls() {
     HOST_IP=$(hostname -I | awk '{print $1}')
     
     echo ""
+    echo -e "${GREEN}Riven:${NC}       http://${HOST_IP}:3000"
     echo -e "${GREEN}Plex:${NC}        http://${HOST_IP}:32400/web"
     echo -e "${GREEN}Radarr:${NC}      http://${HOST_IP}:7878"
     echo -e "${GREEN}Sonarr:${NC}      http://${HOST_IP}:8989"
     echo -e "${GREEN}Prowlarr:${NC}    http://${HOST_IP}:9696"
-    echo -e "${GREEN}Bazarr:${NC}      http://${HOST_IP}:6767"
+    echo -e "${GREEN}Bazarr:${NC}      (Disabled)"
     echo -e "${GREEN}Autoscan:${NC}    http://${HOST_IP}:3030"
     echo -e "${GREEN}Overseerr:${NC}   http://${HOST_IP}:5055"
-    echo -e "${GREEN}Zurg:${NC}        http://${HOST_IP}:9999"
+    echo -e "${GREEN}Zurg:${NC}        (Disabled)"
     echo ""
 }
 
@@ -190,7 +190,7 @@ Commands:
     start           Start all services
     stop            Stop all services
     restart         Restart all services
-    core            Start core services only (Zurg + rclone)
+    core            Start core services (Riven, Plex, Overseerr)
     status          Show status of all services
     logs [service]  Show logs (all services or specific service)
     update          Update all services to latest versions

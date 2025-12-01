@@ -164,7 +164,7 @@ Recyclarr is configured to sync TRaSH guides quality profiles.
 
 2. **Download Client** (Torrent Blackhole):
    - Name: `Blackhole`
-   - Torrent Folder: `/data/symlinks/radarr/processing` (or sonarr)
+   - Torrent Folder: `/data/symlinks/radarr` (or sonarr)
    - Watch Folder: `/data/symlinks/radarr/completed` (or sonarr)
    - Save Magnet Files: Yes
    - Magnet File Extension: `.magnet`
