@@ -103,7 +103,6 @@ services:
       - "8388:8388/tcp" # Shadowsocks
       - "8388:8388/udp" # Shadowsocks
       - "9696:9696" # Prowlarr
-      - "8080:8080" # Riven
     volumes:
       - ./configs/gluetun:/gluetun
     environment:
@@ -136,6 +135,21 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+
+  # ============================================
+  # FLARESOLVERR - Cloudflare Proxy
+  # ============================================
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ:-America/New_York}
+    ports:
+      - "8191:8191"
+    networks:
+      - mediacenter
 
   # ============================================
   # RADARR - Movie Management (DISABLED FOR RIVEN)
