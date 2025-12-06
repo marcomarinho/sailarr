@@ -78,7 +78,8 @@ services:
       - ./data/plex:/data
       - ./data/local/transcodes/plex:/transcode
       # - ./data/remote/realdebrid:/data/remote/realdebrid:ro # Replaced by Riven mount
-      - ./data/riven/mount:/data/riven:rslave # Riven Mount
+      #- ./data/riven/mount:/data/riven:rslave # Riven Mount
+      - /mnt/riven:/mount:rslave,z
       - /mnt:/mnt
       - /dev/shm:/dev/shm
     depends_on:
@@ -277,7 +278,7 @@ services:
   # OVERSEERR - Request Management System
   # ============================================
   overseerr:
-    image: sct/overseerr:latest
+    image: seerr/seerr:develop
     container_name: overseerr
     restart: unless-stopped
     environment:
@@ -289,8 +290,6 @@ services:
       - ./configs/overseerr:/app/config
     depends_on:
       - plex
-      - radarr
-      - sonarr
     networks:
       - mediacenter
 
@@ -298,7 +297,7 @@ services:
   # RIVEN - Media Management
   # ============================================
   riven:
-    image: spoked/riven:latest
+    image: spoked/riven:dev
     container_name: riven
     restart: unless-stopped
     ports:
@@ -357,7 +356,7 @@ services:
       - mediacenter
 
   riven-frontend:
-    image: spoked/riven-frontend:latest
+    image: spoked/riven-frontend:dev
     container_name: riven-frontend
     restart: unless-stopped
     ports:
@@ -366,11 +365,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ:-America/New_York}
-      - ORIGIN=http://localhost:3000 # Change to your domain if needed
+      - ORIGIN=http://192.168.1.100:3000 # Change to your domain if needed
+      - DATABASE_URL=/riven/config/auth.db
       - BACKEND_URL=http://riven:8080
       - BACKEND_API_KEY=${BACKEND_API_KEY}
-      - DIALECT=postgres
-      - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
     depends_on:
       riven:
         condition: service_healthy
@@ -386,7 +384,7 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres # Change in production!
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=riven
     volumes:
       - ./configs/riven/db:/var/lib/postgresql/data/pgdata
