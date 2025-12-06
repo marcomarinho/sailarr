@@ -25,7 +25,7 @@ echo "📁 Creating config directories..."
 # Riven
 mkdir -p "${BASE_DIR}"/configs/riven/{data,frontend,db}
 # Other services
-mkdir -p "${BASE_DIR}"/configs/{plex,prowlarr,overseerr}
+mkdir -p "${BASE_DIR}"/configs/{plex,prowlarr,overseerr,gluetun}
 
 # Create data directories
 echo "📁 Creating data directories..."
