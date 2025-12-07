@@ -75,12 +75,12 @@ services:
       - /dev/dri:/dev/dri # Hardware transcoding (Intel/AMD)
     volumes:
       - ./configs/plex:/config
-      - ./data/plex:/data
+      #- ./data/plex:/data
       - ./data/local/transcodes/plex:/transcode
       # - ./data/remote/realdebrid:/data/remote/realdebrid:ro # Replaced by Riven mount
       #- ./data/riven/mount:/data/riven:rslave # Riven Mount
       - /mnt/riven:/mount:rslave,z
-      - /mnt:/mnt
+      #- /mnt:/mnt
       - /dev/shm:/dev/shm
     depends_on:
       - riven
@@ -103,6 +103,7 @@ services:
       - "8388:8388/tcp" # Shadowsocks
       - "8388:8388/udp" # Shadowsocks
       - "9696:9696" # Prowlarr
+      - "8191:8191" # Flaresolverr
     volumes:
       - ./configs/gluetun:/gluetun
     environment:
@@ -142,14 +143,11 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    network_mode: service:gluetun
     restart: unless-stopped
     environment:
       - LOG_LEVEL=info
       - TZ=${TZ:-America/New_York}
-    ports:
-      - "8191:8191"
-    networks:
-      - mediacenter
 
   # ============================================
   # RADARR - Movie Management (DISABLED FOR RIVEN)
@@ -322,7 +320,8 @@ services:
   # OVERSEERR - Request Management System
   # ============================================
   overseerr:
-    image: seerr/seerr:develop
+    image: ghcr.io/seerr-team/seerr:develop
+    init: true
     container_name: overseerr
     restart: unless-stopped
     environment:
@@ -341,7 +340,7 @@ services:
   # RIVEN - Media Management
   # ============================================
   riven:
-    image: spoked/riven:dev
+    image: spoked/riven:sha-ade53c1
     container_name: riven
     restart: unless-stopped
     ports:
