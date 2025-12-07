@@ -119,6 +119,60 @@ services:
       - mediacenter
 
   # ============================================
+  # ARR STACK (Dummy for Bazarr)
+  # ============================================
+  sonarr:
+    image: ghcr.io/hotio/sonarr:release
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/New_York}
+    ports:
+      - "8989:8989"
+    volumes:
+      - ./configs/sonarr:/config
+      - /mnt/riven:/data
+    networks:
+      - mediacenter
+
+  radarr:
+    image: ghcr.io/hotio/radarr:release
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/New_York}
+    ports:
+      - "7878:7878"
+    volumes:
+      - ./configs/radarr:/config
+      - /mnt/riven:/data
+    networks:
+      - mediacenter
+
+  bazarr:
+    image: ghcr.io/hotio/bazarr:release
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-America/New_York}
+    ports:
+      - "6767:6767"
+    volumes:
+      - ./configs/bazarr:/config
+      - /mnt/riven:/data
+    depends_on:
+      - sonarr
+      - radarr
+    networks:
+      - mediacenter
+
+  # ============================================
   # RIVEN - Media Management
   # ============================================
   riven:
