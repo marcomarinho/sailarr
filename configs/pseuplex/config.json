@@ -1,0 +1,26 @@
+{
+    "port": 32397,
+    "plex": {
+        "host": "http://plex:32400",
+        "token": "PLEX_TOKEN_PLACEHOLDER",
+        "appDataPath": "/plex_config/Library/Application Support/Plex Media Server"
+    },
+    "ssl": {
+        "autoP12Path": true,
+        "autoP12Password": true
+    },
+    "plugins": {
+        "requests": "builtin"
+    },
+    "requests": {
+        "enabled": true
+    },
+    "overseerr": {
+        "host": "http://overseerr:5055",
+        "apiKey": "OVERSEERR_API_KEY_PLACEHOLDER"
+    },
+    "dashboard": {
+        "enabled": true,
+        "uuid": "DASHBOARD_UUID_PLACEHOLDER"
+    }
+}

@@ -219,7 +219,27 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      networks:
+        - mediacenter
+
+  # ============================================
+  # PSEUPLEX - Plex Middleware
+  # ============================================
+  pseuplex:
+    image: ghcr.io/lufinkey/pseuplex:dev
+    container_name: pseuplex
+    restart: unless-stopped
+    ports:
+      - "32397:32397"
+    volumes:
+      - ./configs/pseuplex:/config
+      # OPTIONAL: Map plex config if you want to use auto-p12 discovery (disabled by default in our config below)
+      - ./configs/plex:/plex_config:ro
+    environment:
+      - TZ=${TZ:-America/New_York}
+    depends_on:
+      - plex
+      - overseerr
     networks:
       - mediacenter
 
